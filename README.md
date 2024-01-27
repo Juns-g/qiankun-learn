@@ -15,3 +15,26 @@
 ### sub-react
 
 子应用，最新版本 react，vite 构建
+
+## 配置
+
+### 修改端口
+
+vue2 和 vue3 都使用的 VueCli 构建，修改 vue3 的端口为 8001：
+
+```js
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  transpileDependencies: true,
+  devServer: {
+    port: 8001,
+  },
+})
+```
+
+### 基座接入乾坤
+
+[qiankun官方文档](https://qiankun.umijs.org/zh/guide/getting-started)
+```bash
+npm i qiankun -S
+```

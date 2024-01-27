@@ -4,14 +4,21 @@
       <router-link to="/page1">Go to base vue2 Page1</router-link>
       <router-link to="/page2">Go to base vue2 Page2</router-link>
       <router-link to="/">Go to base vue2 HelloWorld</router-link>
+      <button @click="goVue3">去vue3子应用</button>
     </div>
     <router-view />
+    <div id="sub-app" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
+  methods: {
+    goVue3() {
+      window.location.href = 'http://localhost:8080/'
+    },
+  },
 }
 </script>
 
@@ -29,5 +36,8 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+#sub-app {
+  border: red 1px solid;
 }
 </style>
