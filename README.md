@@ -20,14 +20,41 @@
 
 ### 修改端口
 
-vue2 和 vue3 都使用的 VueCli 构建，修改 vue3 的端口为 8001：
+vue2 和 vue3 都使用的 VueCli 构建
+vue2 使用端口 8000，vue3 使用端口 8001, react 使用端口 8002
 
 ```js
+// vue2
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  transpileDependencies: true,
+  devServer: {
+    port: 8000,
+  },
+})
+```
+
+```js
+// vue3
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     port: 8001,
+    headers: {
+      // 跨域
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
+  configureWebpack: {
+    output: {
+      // 必须打包出一个库文件
+      library: `sub-vue3`,
+      // 库格式必须是 umd
+      libraryTarget: 'umd', // 把子应用打包成 umd 库格式
+      // jsonpFunction: `webpackJsonp_${name}`,
+      chunkLoadingGlobal: `webpackJsonp_sub_vue3`,
+    },
   },
 })
 ```
@@ -37,7 +64,7 @@ module.exports = defineConfig({
 [qiankun 官方文档](https://qiankun.umijs.org/zh/guide/getting-started)
 
 ```bash
-npm i qiankun -S
+pnpm i qiankun -S
 ```
 
 入口文件改造：
@@ -107,10 +134,94 @@ registerMicroApps(subApps, lifeCycles)
 start()
 ```
 
+引入 vue-router，给子应用提供容器
+
+```vue
+// App.vue
+<template>
+  <div id="app">
+    <div class="links">
+      <router-link to="/page1">Go to base vue2 Page1</router-link>
+      <router-link to="/page2">Go to base vue2 Page2</router-link>
+      <router-link to="/">Go to base vue2 HelloWorld</router-link>
+      <router-link to="/sub-vue3">Go to /sub-vue3</router-link>
+      <button @click="goVue3">去vue3子应用 独立访问</button>
+    </div>
+    <router-view />
+    <div id="sub-app" />
+  </div>
+</template>
+```
+
 ### vue3 子应用接入
 
-入口文件导出生命周期钩子：
+> 不用引入 qiankun，直接修改配置即可
+
+入口文件导出生命周期钩子，并针对不同情况渲染不同内容。
+比如在 qiankun 环境（嵌入主应用时）渲染在 props.container 里面的#app，否则渲染在#app。
 
 ```js
+import { createApp } from 'vue'
+import App from './App.vue'
 
+let app = null
+
+function render({ container } = {}) {
+  app = createApp(App)
+  app.mount(container ? container.querySelector('#app') : '#app')
+}
+
+if (!window.__POWERED_BY_QIANKUN__) {
+  render()
+}
+
+export async function bootstrap() {
+  console.log('vue3 bootstrap')
+}
+
+export async function mount(props) {
+  console.log('vue3 mount props', props)
+  render(props)
+}
+
+export async function unmount(props) {
+  console.log('vue3 unmount props', props)
+  app.unmount('#sub-app')
+  app._container.innerHTML = ''
+  app = null
+}
+
+// 可选生命周期钩子，仅使用 loadMicroApp 方式加载微应用时生效
+export async function update(props) {
+  console.log('vue3 update props', props)
+}
 ```
+
+webpack 配置更改，需要允许跨域，并修改打包配置
+
+```js
+// vue.config.js
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  transpileDependencies: true,
+  devServer: {
+    port: 8001,
+    headers: {
+      // 跨域
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
+  configureWebpack: {
+    output: {
+      // 必须打包出一个库文件
+      library: 'sub-vue3',
+      // 库格式必须是 umd
+      libraryTarget: 'umd', // 把子应用打包成 umd 库格式
+      // jsonpFunction: `webpackJsonp_${name}`,
+      chunkLoadingGlobal: `webpackJsonp_sub_vue3`,
+    },
+  },
+})
+```
+
+## 问题记录
