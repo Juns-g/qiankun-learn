@@ -202,6 +202,7 @@ webpack 配置更改，需要允许跨域，并修改打包配置
 ```js
 // vue.config.js
 const { defineConfig } = require('@vue/cli-service')
+const name = require('./package.json').name
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
@@ -214,14 +215,22 @@ module.exports = defineConfig({
   configureWebpack: {
     output: {
       // 必须打包出一个库文件
-      library: 'sub-vue3',
+      library: `${name}-[name]`,
       // 库格式必须是 umd
       libraryTarget: 'umd', // 把子应用打包成 umd 库格式
       // jsonpFunction: `webpackJsonp_${name}`,
-      chunkLoadingGlobal: `webpackJsonp_sub_vue3`,
+      chunkLoadingGlobal: `webpackJsonp_${name}`,
     },
   },
 })
 ```
+
+现在可以发现子应用已经成功接入了，不过样式还有些问题
+![vue3 子应用接入](https://pic.imgdb.cn/item/65b6142c871b83018a94333d.jpg)
+
+### 样式调整
+
+vue2 引入 elementUI，vue3 引入 elementPlus
+详细如何引入不再赘述，遇到的问题会记录在 [问题记录](#问题记录) 里面
 
 ## 问题记录

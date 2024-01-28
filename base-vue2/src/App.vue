@@ -1,20 +1,20 @@
 <template>
-  <div id="app">
-    <div class="links">
-      <router-link to="/page1">Go to base vue2 Page1</router-link>
-      <router-link to="/page2">Go to base vue2 Page2</router-link>
-      <router-link to="/">Go to base vue2 HelloWorld</router-link>
-      <router-link to="/sub-vue3">Go to /sub-vue3</router-link>
-      <button @click="goVue3">去vue3子应用 独立访问</button>
-    </div>
-    <router-view />
-    <div id="sub-app" />
-  </div>
+  <el-container class="base-container">
+    <el-aside width="200px">
+      <BaseNav />
+    </el-aside>
+    <el-main>
+      <router-view />
+      <div id="sub-app" />
+    </el-main>
+  </el-container>
 </template>
 
 <script>
+import BaseNav from './components/BaseNav.vue'
 export default {
   name: 'App',
+  components: { BaseNav },
   methods: {
     goVue3() {
       window.location.href = 'http://localhost:8001/'
@@ -24,20 +24,11 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.base-container {
+  height: 100vh;
+  width: 100vw;
 }
-.links {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
+
 #sub-app {
   border: red 1px solid;
 }

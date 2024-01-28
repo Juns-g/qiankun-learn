@@ -3,9 +3,13 @@ import routes from './router/index.js'
 import Router from 'vue-router'
 import App from './App.vue'
 import { registerMicroApps, start } from 'qiankun'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import './index.css'
 
 Vue.config.productionTip = false
 Vue.use(Router)
+Vue.use(ElementUI)
 
 const router = new Router({
   routes,
