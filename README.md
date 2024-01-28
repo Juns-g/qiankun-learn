@@ -233,6 +233,8 @@ module.exports = defineConfig({
 vue2 引入 elementUI，vue3 引入 elementPlus
 详细如何引入不再赘述，遇到的问题会记录在 [问题记录](#问题记录) 里面
 
+![vue2 引入 elementUI](https://pic.imgdb.cn/item/65b64ab2871b83018a669546.jpg)
+
 ## 问题记录
 
 ### 父子应用路由问题
