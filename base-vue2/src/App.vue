@@ -5,19 +5,25 @@
     </el-aside>
     <el-main>
       <router-view />
-      <div id="sub-app" />
+      <div
+        id="sub-app"
+        v-if="isMicro"
+      />
     </el-main>
   </el-container>
 </template>
 
 <script>
 import BaseNav from './components/BaseNav.vue'
+import { activeRules } from './qiankun.js'
 export default {
   name: 'App',
   components: { BaseNav },
-  methods: {
-    goVue3() {
-      window.location.href = 'http://localhost:8001/'
+  methods: {},
+  computed: {
+    isMicro() {
+      const { path } = this.$route
+      return activeRules.some(rule => path.startsWith(rule))
     },
   },
 }
