@@ -4,7 +4,8 @@
       <router-link to="/page1">Go to base vue2 Page1</router-link>
       <router-link to="/page2">Go to base vue2 Page2</router-link>
       <router-link to="/">Go to base vue2 HelloWorld</router-link>
-      <button @click="goVue3">去vue3子应用</button>
+      <router-link to="/sub-vue3">Go to /sub-vue3</router-link>
+      <button @click="goVue3">去vue3子应用 独立访问</button>
     </div>
     <router-view />
     <div id="sub-app" />
@@ -16,7 +17,7 @@ export default {
   name: 'App',
   methods: {
     goVue3() {
-      window.location.href = 'http://localhost:8080/'
+      window.location.href = 'http://localhost:8001/'
     },
   },
 }
