@@ -235,6 +235,8 @@ vue2 引入 elementUI，vue3 引入 elementPlus
 
 ![vue2 引入 elementUI](https://pic.imgdb.cn/item/65b64ab2871b83018a669546.jpg)
 
+![vue3 引入 element PLUS](https://pic.imgdb.cn/item/65b6502c871b83018a80fb77.jpg)
+
 ## 问题记录
 
 ### 父子应用路由问题

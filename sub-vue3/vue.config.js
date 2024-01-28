@@ -1,5 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 const name = require('./package.json').name
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
+
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
@@ -18,5 +20,13 @@ module.exports = defineConfig({
       // jsonpFunction: `webpackJsonp_${name}`,
       chunkLoadingGlobal: `webpackJsonp_${name}`,
     },
+    plugins: [
+      require('unplugin-auto-import/webpack').default({
+        resolvers: [ElementPlusResolver()],
+      }),
+      require('unplugin-vue-components/webpack').default({
+        resolvers: [ElementPlusResolver()],
+      }),
+    ],
   },
 })
