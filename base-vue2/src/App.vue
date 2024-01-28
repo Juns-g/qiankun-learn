@@ -4,7 +4,7 @@
       <BaseNav />
     </el-aside>
     <el-main>
-      <router-view />
+      <router-view class="base-view" />
       <div
         id="sub-app"
         v-if="isMicro"
@@ -35,7 +35,16 @@ export default {
   width: 100vw;
 }
 
-#sub-app {
-  border: red 1px solid;
+#sub-app,
+.base-view {
+  border: #dcdfe6 1px solid;
+  border-radius: 10px;
+  padding: 4px;
+  width: 100%;
+  height: 100%;
+}
+
+.base-view {
+  text-align: center;
 }
 </style>
