@@ -234,3 +234,44 @@ vue2 引入 elementUI，vue3 引入 elementPlus
 详细如何引入不再赘述，遇到的问题会记录在 [问题记录](#问题记录) 里面
 
 ## 问题记录
+
+### 父子应用路由问题
+
+#### 问题描述
+
+单独访问子应用 (localhost:8001) 路由都正常, 在父应用中访问子应用(localhost:8000/sub-vue3)出现路由报错`[Vue Router warn]: No match found for location with path "/sub-vue3"`
+
+子应用路由配置如下:
+
+```js
+const routes = [
+  { path: '/', component: HelloWorld },
+  { path: '/about', component: AboutPage },
+]
+```
+
+#### 分析
+
+单独访问子应用，一切正常，但是嵌入基座去访问就无法显示页面。查看控制台报错，发现是路由匹配不到。也就是说，单独访问时路由`/about`对应页面正确，嵌入时`/sub-vue3/about`这个路由没有被正确匹配。
+
+思路：区分当前是否单独访问，单独访问使用`/about`，qiankun 环境使用`/sub-vue3/about`，判断条件可以用 qiankun 在全局 window 注入的`window.__POWERED_BY_QIANKUN__`
+
+#### 尝试解决
+
+修改子应用的路由配置，qiankun 环境就统一添加前缀：
+
+```js
+let routes = [
+  { path: '/', component: HelloWorld },
+  { path: '/about', component: AboutPage },
+]
+
+if (window.__POWERED_BY_QIANKUN__) {
+  routes = routes.map(route => ({
+    ...route,
+    path: `/sub-vue3${route.path}`,
+  }))
+}
+```
+
+问题解决，都符合预期

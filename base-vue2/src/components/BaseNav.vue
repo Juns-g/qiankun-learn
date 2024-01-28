@@ -17,7 +17,11 @@
     </el-menu-item>
     <el-menu-item index="/sub-vue3">
       <i class="el-icon-tickets" />
-      <span slot="title"> /sub-vue3 </span>
+      <span slot="title"> sub-vue3 home </span>
+    </el-menu-item>
+    <el-menu-item index="/sub-vue3/about">
+      <i class="el-icon-tickets" />
+      <span slot="title"> sub-vue3 about </span>
     </el-menu-item>
   </el-menu>
 </template>

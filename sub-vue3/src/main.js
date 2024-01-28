@@ -1,11 +1,13 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router/index.js'
 
 let app = null
 
 function render({ container } = {}) {
   console.log('🚀 ~ container:', container)
   app = createApp(App)
+  app.use(router)
   app.mount(container ? container.querySelector('#app') : '#app')
 }
 
