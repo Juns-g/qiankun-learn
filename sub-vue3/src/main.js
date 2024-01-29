@@ -15,7 +15,6 @@ function render({ container } = {}) {
     ),
     routes,
   })
-  console.log('🚀 ~ router:', router)
   app.use(router)
   app.mount(container ? container.querySelector('#app') : '#app')
 }
