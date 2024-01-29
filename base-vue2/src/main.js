@@ -25,4 +25,9 @@ new Vue({
 // 注册
 registerMicroApps(subApps, lifeCycles)
 // 启动微服务
-start()
+start({
+  sandbox: {
+    strictStyleIsolation: false,
+    experimentalStyleIsolation: true,
+  },
+})

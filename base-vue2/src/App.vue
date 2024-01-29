@@ -4,6 +4,13 @@
       <BaseNav />
     </el-aside>
     <el-main>
+      <p class="test-scope-p">
+        这段文字用来测试样式隔离，类名是: test-scope-p
+        <br />
+        在vue2里面的样式是: red 18px
+        <br />
+        vue3: blue 28px
+      </p>
       <router-view class="base-view" />
       <div
         id="sub-app"
@@ -40,11 +47,19 @@ export default {
   border: #dcdfe6 1px solid;
   border-radius: 10px;
   padding: 8px;
-  width: 100%;
-  height: 100%;
+  height: 97%;
 }
 
 .base-view {
   text-align: center;
+}
+
+.test-scope-p {
+  font-size: 18px;
+  color: red;
+}
+.vue3-p {
+  font-size: 18px;
+  color: red;
 }
 </style>

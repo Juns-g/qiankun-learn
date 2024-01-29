@@ -16,4 +16,12 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.test-scope-p {
+  color: blue;
+  font-size: 28px;
+}
+.vue3-p {
+  font-size: 28px;
+  color: blue;
+}
 </style>

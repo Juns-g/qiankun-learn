@@ -279,3 +279,59 @@ if (window.__POWERED_BY_QIANKUN__) {
 ```
 
 问题解决，都符合预期
+
+### 子应用样式覆盖基座问题
+
+#### 问题描述
+
+侧边栏和顶栏都是基座应用的，但是访问子应用时，子应用的同名样式覆盖掉了基座应用的样式。如下图：
+
+![基座](https://pic.imgdb.cn/item/65b73351871b83018afccb68.jpg)
+
+![子应用](https://pic.imgdb.cn/item/65b7337a871b83018afd5180.jpg)
+
+#### 分析
+
+样式污染的原因也不太复杂，在俩个应用中的类名重复了，而且没有隔离措施，所以就会导致样式覆盖的问题。思路也有一些，在基座应用中是直接写的样式(没有使用 scoped 或者导入的 css)，父子的同名样式都没有做隔离措施。
+
+#### 方案
+
+1. 父子应用 vue 文件开启 scoped
+   直接把需要隔离禁止改变的样式写到单独对应的 vue 文件中，会自动帮我们加上 hash 来隔离样式。不过如果要在子应用中修改这部分样式的话，就会失败了。但是目的就是这样 🤣，就是不允许子应用修改这个样式。
+2. 使用复杂的类名，人为避免类名重复
+   可行，不过不靠谱。
+3. 开启 qiankun 的 sandbox
+   可行，不过没有详细了解会有哪些坑。他是直接把子应用放在了一个 [shadow dom](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components/Using_shadow_DOM) 里面了，这样也会有问题，父子的样式直接完全隔离了，而且基座无法操作到子应用的 dom 和样式。
+
+#### 解决
+
+最开始的目的是为了解决子应用的样式覆盖基座这个问题，因为项目如果大了之后，不可避免可能会出现类名重复，如果又凑巧没有开启 vue 自带的 scoped 或者人为做隔离措施的话，就容易导致这样的问题。
+
+理想的方案还是直接父子完全样式隔离掉，所以说最好的方案还是直接使用 qiankun 的方案，不过 shadow-box 的坑还没有踩过，以及肯能会有事件冒泡相关的问题，所以暂时不采用。
+
+> sandbox - boolean | { strictStyleIsolation?: boolean, experimentalStyleIsolation?: boolean } - 可选，是否开启沙箱，默认为 true。
+>
+> 默认情况下沙箱可以确保单实例场景子应用之间的样式隔离，但是无法确保主应用跟子应用、或者多实例场景的子应用样式隔离。当配置为 { strictStyleIsolation: true } 时表示开启严格的样式隔离模式。这种模式下 qiankun 会为每个微应用的容器包裹上一个 shadow dom 节点，从而确保微应用的样式不会对全局造成影响。
+>
+> 基于 ShadowDOM 的严格样式隔离并不是一个可以无脑使用的方案，大部分情况下都需要接入应用做一些适配后才能正常在 ShadowDOM 中运行起来（比如 react 场景下需要解决这些 问题，使用者需要清楚开启了 strictStyleIsolation 意味着什么。后续 qiankun 会提供更多官方实践文档帮助用户能快速的将应用改造成可以运行在 ShadowDOM 环境的微应用。
+>
+> 除此以外，qiankun 还提供了一个实验性的样式隔离特性，当 experimentalStyleIsolation 被设置为 true 时，qiankun 会改写子应用所添加的样式为所有样式规则增加一个特殊的选择器规则来限定其影响范围，因此改写后的代码会表达类似为如下结构：
+>
+> // 假设应用名是 react16
+>
+> ```css
+> .app-main {
+>   font-size: 14px;
+> }
+> div[data-qiankun-react16] .app-main {
+>   font-size: 14px;
+> }
+> ```
+>
+> 注意: @keyframes, @font-face, @import, @page 将不被支持 (i.e. 不会被改写)
+
+其中的 experimentalStyleIsolation 感觉是最为合适的选择，不过还处于实验性，所以需要关注一下 qiankun 这个 api 的之后更新。
+
+最终采用的就是这个方案。
+
+![问题解决](https://pic.imgdb.cn/item/65b73a9a871b83018a1250be.jpg)
