@@ -1,12 +1,21 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router/index.js'
+import routes from './router/index.js'
+import { createRouter, createWebHistory } from 'vue-router'
 
 let app = null
+let router = null
 
 function render({ container } = {}) {
   console.log('🚀 ~ container:', container)
   app = createApp(App)
+  router = createRouter({
+    history: createWebHistory(
+      window.__POWERED_BY_QIANKUN__ ? '/sub-vue3' : '/'
+    ),
+    routes,
+  })
+  console.log('🚀 ~ router:', router)
   app.use(router)
   app.mount(container ? container.querySelector('#app') : '#app')
 }
@@ -34,6 +43,7 @@ export async function unmount(props) {
   app.unmount('#sub-app')
   app._container.innerHTML = ''
   app = null
+  router = null
 }
 
 // 可选生命周期钩子，仅使用 loadMicroApp 方式加载微应用时生效

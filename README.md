@@ -278,6 +278,34 @@ if (window.__POWERED_BY_QIANKUN__) {
 }
 ```
 
+补充：发现 vue-router 的 createWebHistory 支持一个参数`base`，默认是`/`，也可以自己传参作为前缀，所以更改代码为：
+
+```js
+const routes = [
+  { path: '/', component: HelloWorld },
+  { path: '/about', component: AboutPage },
+]
+
+export default routes
+```
+
+```js
+let app = null
+let router = null
+
+function render({ container } = {}) {
+  app = createApp(App)
+  router = createRouter({
+    history: createWebHistory(
+      window.__POWERED_BY_QIANKUN__ ? '/sub-vue3' : '/'
+    ),
+    routes,
+  })
+  app.use(router)
+  app.mount(container ? container.querySelector('#app') : '#app')
+}
+```
+
 问题解决，都符合预期
 
 ### 子应用样式覆盖基座问题
