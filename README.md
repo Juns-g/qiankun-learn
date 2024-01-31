@@ -363,3 +363,5 @@ function render({ container } = {}) {
 最终采用的就是这个方案。
 
 ![问题解决](https://pic.imgdb.cn/item/65b73a9a871b83018a1250be.jpg)
+
+> 也可以通过组件库提供的 prefix 来自己添加前缀
