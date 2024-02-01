@@ -41,12 +41,28 @@
       ></el-col
     >
     <el-col :span="12"><div class="grid-content ep-bg-purple" /></el-col>
+    <el-col :span="12">
+      <div>
+        <el-button @click="goP">params</el-button>
+        <el-button @click="goQ">query</el-button>
+      </div>
+    </el-col>
   </el-row>
 </template>
 
-<script>
-export default {
-  name: 'AboutPage',
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goP = () => {
+  const params = {
+    p: 1,
+  }
+  router.push({ name: 'home', state: { params } })
+}
+const goQ = () => {
+  router.push({ path: '/', query: { q: 1 } })
 }
 </script>
 

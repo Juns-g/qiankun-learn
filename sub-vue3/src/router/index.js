@@ -2,8 +2,8 @@ import AboutPage from '../components/AboutPage.vue'
 import HelloWorld from '../components/HelloWorld.vue'
 
 const routes = [
-  { path: '/', component: HelloWorld },
-  { path: '/about', component: AboutPage },
+  { name: 'home', path: '/', component: HelloWorld },
+  { name: 'about', path: '/about', component: AboutPage },
 ]
 
 export default routes

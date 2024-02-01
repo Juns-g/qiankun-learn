@@ -9,13 +9,22 @@
       <br />
       vue3: blue 28px
     </p>
+    <div>
+      {{ $route }}
+    </div>
+    <br />
+    <div>
+      {{ $router }}
+    </div>
+    <div>
+      {{ historyParams }}
+      <router-link to="/about">about</router-link>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HelloWorld',
-}
+<script setup>
+const historyParams = history.state.params
 </script>
 
 <style scoped>
