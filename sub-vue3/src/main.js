@@ -6,15 +6,24 @@ import { createRouter, createWebHistory } from 'vue-router'
 let app = null
 let router = null
 
-function render({ container } = {}) {
-  console.log('🚀 ~ container:', container)
-  app = createApp(App)
+function initRouter() {
   router = createRouter({
     history: createWebHistory(
       window.__POWERED_BY_QIANKUN__ ? '/sub-vue3' : '/'
     ),
     routes,
   })
+  router.beforeEach((to, from) => {
+    console.log('🚀 ~ to:', to)
+    console.log('🚀 ~ from:', from)
+    return true
+  })
+}
+
+function render({ container } = {}) {
+  console.log('🚀 ~ container:', container)
+  app = createApp(App)
+  initRouter()
   app.use(router)
   app.mount(container ? container.querySelector('#app') : '#app')
 }
